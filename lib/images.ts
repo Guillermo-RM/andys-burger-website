@@ -19,6 +19,33 @@ export type SiteImage = {
   };
 };
 
+export function createImageStructuredData(
+  image: SiteImage,
+  options: { representativeOfPage?: boolean } = {},
+) {
+  return {
+    "@type": "ImageObject",
+    "@id": `${image.seoSrc}#image`,
+    url: image.seoSrc,
+    contentUrl: image.seoSrc,
+    thumbnailUrl: image.social.src,
+    name: image.name,
+    alternateName: image.fileName,
+    description: image.description,
+    caption: image.alt,
+    width: image.width,
+    height: image.height,
+    creditText: "Andy's Burger",
+    creator: {
+      "@type": "Organization",
+      name: "Andy's Burger",
+    },
+    ...(options.representativeOfPage
+      ? { representativeOfPage: true }
+      : {}),
+  };
+}
+
 const homeHeroSource =
   "https://res.cloudinary.com/dhoho4qse/image/upload/v1785799698/hamburguesa-artesanal-andys-burger-san-ramon_kjetsu.png";
 

@@ -1,8 +1,7 @@
 import { WhatsAppIcon } from "@/components/whatsapp-icon";
+import { whatsappGreetingUrl } from "@/lib/whatsapp";
 import { SocialIcon } from "@/components/social-icon";
 
-const whatsappUrl =
-  "https://wa.me/50689742305?text=Hola%2C%20Andy%27s%20Burger!%20Quiero%20realizar%20un%20pedido.";
 const googleMapsEmbedUrl =
   "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3927.9191987430827!2d-84.4650583!3d10.1056999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8fa0450051232683%3A0xcace868bb64699d6!2sAndy's%20Burger!5e0!3m2!1ses!2scr!4v1785863337534!5m2!1ses!2scr";
 
@@ -47,7 +46,7 @@ export function SiteFooter() {
             </p>
             <a
               className="site-footer__order"
-              href={whatsappUrl}
+              href={whatsappGreetingUrl}
               target="_blank"
               rel="noopener noreferrer"
             >

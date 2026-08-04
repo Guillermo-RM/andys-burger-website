@@ -17,6 +17,27 @@ html {
   background: var(--brand-black);
   color-scheme: dark;
   scroll-behavior: smooth;
+  scrollbar-color: var(--brand-white) var(--brand-black);
+  scrollbar-width: thin;
+}
+
+html::-webkit-scrollbar {
+  width: 0.75rem;
+}
+
+html::-webkit-scrollbar-track {
+  background: var(--brand-black);
+}
+
+html::-webkit-scrollbar-thumb {
+  border: 3px solid var(--brand-black);
+  border-radius: 999px;
+  background: var(--brand-white);
+  transition: background-color 0.3s ease;
+}
+
+html::-webkit-scrollbar-thumb:hover {
+  background: var(--brand-white);
 }
 
 body {
@@ -53,6 +74,55 @@ button {
 
 .route-shell {
   min-height: calc(100vh - var(--topbar-height));
+}
+
+.route-transition {
+  min-width: 0;
+  animation: route-fade-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes route-fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(1.75rem);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+.scroll-reveal--card {
+  transform: translateY(1.25rem) scale(0.985);
+}
+
+.scroll-reveal.is-visible {
+  opacity: 1;
+  transform: none;
+  will-change: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .route-transition {
+    animation: none;
+  }
+
+  .scroll-reveal,
+  .scroll-reveal--card,
+  .scroll-reveal.is-visible {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }
 
 .hero {
@@ -159,15 +229,15 @@ button {
 
 .hero__button--primary:hover {
   border-color: var(--brand-black);
-  background: var(--brand-orange);
+  background: var(--brand-black);
 }
 
 .hero__button--primary:hover .hero__button-text {
-  color: var(--brand-black);
+  color: var(--brand-white);
 }
 
 .hero__button--primary:hover .hero__button-accent {
-  color: var(--brand-black);
+  color: var(--brand-white);
 }
 
 .hero__button:focus-visible {
@@ -2396,6 +2466,7 @@ button {
   grid-auto-columns: minmax(20rem, 28rem);
   gap: 1rem;
   overflow-x: auto;
+  overflow-y: hidden;
   padding: 0.25rem 0.1rem 1rem;
   scroll-behavior: smooth;
   scroll-snap-type: inline mandatory;

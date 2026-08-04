@@ -3,8 +3,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { GoogleReviewsCarousel } from "@/components/google-reviews-carousel";
 import { HomeBurgerMenu } from "@/components/home-burger-menu";
-import { siteImages } from "@/lib/images";
+import { createImageStructuredData, siteImages } from "@/lib/images";
 import { burgers, extras, potatoOrders } from "@/lib/menu";
+import { absoluteUrl, businessId, menuId, websiteId } from "@/lib/site";
 
 const heroImage = siteImages.homeHero;
 const seoTitle = "Hamburguesas San Ramón";
@@ -16,6 +17,9 @@ export const metadata: Metadata = {
     absolute: seoTitle,
   },
   description: seoDescription,
+  alternates: {
+    canonical: "/",
+  },
   keywords: [
     "hamburguesas San Ramón",
     "hamburguesas en San Ramón",
@@ -73,23 +77,23 @@ const homeStructuredData = {
   "@graph": [
     {
       "@type": "WebPage",
+      "@id": absoluteUrl("/#pagina-inicio"),
+      url: absoluteUrl("/"),
       name: seoTitle,
       description: seoDescription,
       inLanguage: "es-CR",
-      primaryImageOfPage: {
-        "@type": "ImageObject",
-        name: heroImage.name,
-        description: heroImage.description,
-        caption: heroImage.alt,
-        contentUrl: heroImage.seoSrc,
-        width: heroImage.width,
-        height: heroImage.height,
-      },
-      mainEntity: { "@id": "#menu-hamburguesas" },
+      primaryImageOfPage: createImageStructuredData(heroImage, {
+        representativeOfPage: true,
+      }),
+      isPartOf: { "@id": websiteId },
+      about: { "@id": businessId },
+      mainEntity: { "@id": menuId },
     },
     {
       "@type": "Menu",
-      "@id": "#menu-hamburguesas",
+      "@id": menuId,
+      url: absoluteUrl("/menu"),
+      provider: { "@id": businessId },
       name: "Menú de hamburguesas en San Ramón de Andy's Burger",
       description:
         "Menú con 13 hamburguesas al grill, extras y órdenes adicionales de papas de Andy's Burger en San Ramón, Alajuela.",
@@ -105,13 +109,7 @@ const homeStructuredData = {
             name: burger.name,
             description: `${burger.description} ${burger.ingredients} Incluye papas gajo o crispy.`,
             image: {
-              "@type": "ImageObject",
-              name: burger.image.name,
-              description: burger.image.description,
-              caption: burger.image.alt,
-              contentUrl: burger.image.seoSrc,
-              width: burger.image.width,
-              height: burger.image.height,
+              ...createImageStructuredData(burger.image),
               keywords: [
                 burger.name,
                 "hamburguesas San Ramón",
@@ -188,7 +186,7 @@ export default function Home() {
             </p>
             <div className="hero__actions" aria-label="Acciones principales">
               <Link className="hero__button hero__button--primary" href="/menu">
-                <span className="hero__button-text">Andy's</span>
+                <span className="hero__button-text">Andy&apos;s</span>
                 <span className="hero__button-accent">Menú</span>
               </Link>
             </div>

@@ -50,8 +50,12 @@ export function OrderCartProvider({ children }: { children: ReactNode }) {
   const [storageLoaded, setStorageLoaded] = useState(false);
 
   useEffect(() => {
-    setCart(readStoredCart());
-    setStorageLoaded(true);
+    const frame = window.requestAnimationFrame(() => {
+      setCart(readStoredCart());
+      setStorageLoaded(true);
+    });
+
+    return () => window.cancelAnimationFrame(frame);
   }, []);
 
   useEffect(() => {

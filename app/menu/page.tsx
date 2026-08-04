@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { MenuPageOrdering } from "@/components/menu-page-ordering";
+import { createImageStructuredData } from "@/lib/images";
 import { burgers, extraCategories, potatoOrders } from "@/lib/menu";
+import { absoluteUrl, businessId, menuId } from "@/lib/site";
 
 const pageTitle = "Menú de hamburguesas en San Ramón";
 const pageDescription =
@@ -9,6 +11,9 @@ const pageDescription =
 export const metadata: Metadata = {
   title: pageTitle,
   description: pageDescription,
+  alternates: {
+    canonical: "/menu",
+  },
   keywords: [
     "menú de hamburguesas San Ramón",
     "hamburguesas San Ramón",
@@ -56,7 +61,9 @@ export const metadata: Metadata = {
 const menuStructuredData = {
   "@context": "https://schema.org",
   "@type": "Menu",
-  "@id": "#menu-hamburguesas",
+  "@id": menuId,
+  url: absoluteUrl("/menu"),
+  provider: { "@id": businessId },
   name: "Menú de hamburguesas de Andy's Burger",
   description: pageDescription,
   inLanguage: "es-CR",
@@ -68,7 +75,7 @@ const menuStructuredData = {
         "@type": "MenuItem",
         name: burger.name,
         description: burger.description,
-        image: burger.image.seoSrc,
+        image: createImageStructuredData(burger.image),
         offers: {
           "@type": "Offer",
           price: burger.price,

@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import { SocialIcon, type SocialIconName } from "@/components/social-icon";
 import { WhatsAppIcon } from "@/components/whatsapp-icon";
-import { siteImages } from "@/lib/images";
+import { createImageStructuredData, siteImages } from "@/lib/images";
+import { whatsappGreetingUrl } from "@/lib/whatsapp";
+import { absoluteUrl, businessId, websiteId } from "@/lib/site";
 
 const businessPhone = "+506 8651 0588";
 const businessPhoneHref = "tel:+50686510588";
-const whatsappUrl =
-  "https://wa.me/50689742305?text=Hola%2C%20Andy%27s%20Burger!%20Quiero%20realizar%20un%20pedido.";
 const googleMapsUrl =
   "https://www.google.com/maps/place/Andy's+Burger/data=!4m2!3m1!1s0x0:0xcace868bb64699d6";
 const googleMapsEmbedUrl =
@@ -55,6 +55,9 @@ const socialLinks: Array<{
 export const metadata: Metadata = {
   title: contactTitle,
   description: contactDescription,
+  alternates: {
+    canonical: "/contacto",
+  },
   keywords: [
     "contacto Andy's Burger",
     "ubicación Andy's Burger San Ramón",
@@ -107,90 +110,17 @@ const contactStructuredData = {
   "@graph": [
     {
       "@type": "ContactPage",
-      "@id": "#pagina-contacto",
+      "@id": absoluteUrl("/contacto#pagina-contacto"),
+      url: absoluteUrl("/contacto"),
       name: "Contacto y ubicación de Andy's Burger en San Ramón",
       description: contactDescription,
       inLanguage: "es-CR",
-      mainEntity: { "@id": "#andys-burger" },
-    },
-    {
-      "@type": "FastFoodRestaurant",
-      "@id": "#andys-burger",
-      name: "Andy's Burger",
-      description:
-        "Hamburguesería en San Juan de San Ramón con pedidos para llevar y entrega de hamburguesas a domicilio en San Ramón, Alajuela.",
-      image: contactImage.seoSrc,
-      telephone: "+50686510588",
-      priceRange: "₡₡",
-      currenciesAccepted: "CRC",
-      servesCuisine: ["Hamburguesas", "Comida rápida"],
-      address: {
-        "@type": "PostalAddress",
-        streetAddress:
-          "Del Jardín de Niños de San Juan, 25 m norte y 25 m este, calle de lastre",
-        addressLocality: "San Juan",
-        addressRegion: "San Ramón, Alajuela",
-        postalCode: "20201",
-        addressCountry: "CR",
-      },
-      geo: {
-        "@type": "GeoCoordinates",
-        latitude: 10.1056999,
-        longitude: -84.4650583,
-      },
-      hasMap: googleMapsUrl,
-      areaServed: {
-        "@type": "City",
-        name: "San Ramón, Alajuela",
-      },
-      openingHoursSpecification: [
-        {
-          "@type": "OpeningHoursSpecification",
-          dayOfWeek: "https://schema.org/Monday",
-          opens: "17:00",
-          closes: "22:30",
-        },
-        {
-          "@type": "OpeningHoursSpecification",
-          dayOfWeek: "https://schema.org/Tuesday",
-          opens: "18:30",
-          closes: "22:00",
-        },
-        {
-          "@type": "OpeningHoursSpecification",
-          dayOfWeek: [
-            "https://schema.org/Wednesday",
-            "https://schema.org/Thursday",
-            "https://schema.org/Friday",
-          ],
-          opens: "17:00",
-          closes: "22:30",
-        },
-        {
-          "@type": "OpeningHoursSpecification",
-          dayOfWeek: [
-            "https://schema.org/Saturday",
-            "https://schema.org/Sunday",
-          ],
-          opens: "12:00",
-          closes: "22:30",
-        },
-      ],
-      aggregateRating: {
-        "@type": "AggregateRating",
-        ratingValue: 5,
-        reviewCount: 6,
-        bestRating: 5,
-      },
-      sameAs: [
-        "https://www.instagram.com/andy.sburger/",
-        "https://www.tiktok.com/@andy.sburger",
-        "https://www.facebook.com/people/Andys-Burger/61567575252356/",
-      ],
-      potentialAction: {
-        "@type": "OrderAction",
-        target: whatsappUrl,
-      },
+      isPartOf: { "@id": websiteId },
+      about: { "@id": businessId },
+      mainEntity: { "@id": businessId },
+      primaryImageOfPage: createImageStructuredData(contactImage, {
+        representativeOfPage: true,
+      }),
     },
   ],
 };
@@ -218,7 +148,7 @@ export default function ContactoPage() {
         <div className="contact-page__actions" aria-label="Opciones de contacto">
           <a
             className="contact-page__button contact-page__button--whatsapp"
-            href={whatsappUrl}
+            href={whatsappGreetingUrl}
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -340,7 +270,7 @@ export default function ContactoPage() {
 
         <a
           className="contact-page__button contact-page__button--whatsapp contact-services__cta"
-          href={whatsappUrl}
+          href={whatsappGreetingUrl}
           target="_blank"
           rel="noopener noreferrer"
         >

@@ -46,6 +46,31 @@ No se deben introducir colores fuera de esta paleta salvo indicación expresa.
 
 Todas las páginas y componentes deben ser completamente responsive.
 
+## Plataforma técnica
+
+- El proyecto utiliza Next.js nativo con App Router y React.
+- El destino de producción es Vercel.
+- No se deben reintroducir Vinext, Vite, Wrangler ni configuraciones de
+  Cloudflare Workers.
+- La URL oficial de producción se configura mediante `NEXT_PUBLIC_SITE_URL`.
+- Google Tag Manager se configura mediante `NEXT_PUBLIC_GTM_ID`.
+
+## Descubrimiento para buscadores y asistentes de IA
+
+- La URL canónica se obtiene de `NEXT_PUBLIC_SITE_URL`; en desarrollo local se
+  utiliza `http://localhost:3000`.
+- `sitemap.xml` incluye Inicio, Menú, Contacto y las imágenes principales.
+- `robots.txt` permite el rastreo general y explicita acceso para buscadores y
+  rastreadores de IA conocidos.
+- `llms.txt` ofrece un resumen verificable de la entidad local.
+- `llms-full.txt` presenta dirección, horario, servicios, reputación, redes y
+  el menú completo en texto.
+- Los datos estructurados globales usan una sola entidad `FastFoodRestaurant`
+  con identificadores absolutos compartidos por todas las páginas.
+- No se garantiza aparición ni posición en un buscador: el sitio debe estar
+  publicado en un dominio accesible, enviarse a las herramientas de búsqueda y
+  obtener señales externas consistentes.
+
 ## Home — estructura acordada
 
 ### Topbar

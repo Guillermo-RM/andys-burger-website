@@ -5,8 +5,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useOrderCart } from "@/components/order-cart-context";
 import { WhatsAppIcon } from "@/components/whatsapp-icon";
 import { burgers, extraCategories, extras, potatoOrders } from "@/lib/menu";
+import { createWhatsAppUrl } from "@/lib/whatsapp";
 
-const whatsappNumber = "50689742305";
 const orderProducts = [
   ...burgers.map((burger) => ({ ...burger, orderGroup: "burgers" as const })),
   ...extras.map((extra) => ({ ...extra, orderGroup: "extras" as const })),
@@ -130,7 +130,7 @@ export function HomeBurgerMenu() {
         : "Hola, Andy's Burger!";
 
     window.open(
-      `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`,
+      createWhatsAppUrl(message),
       "_blank",
       "noopener,noreferrer",
     );

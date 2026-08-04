@@ -1,13 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { MenuSectionNavigation } from "@/components/menu-section-navigation";
 import { useOrderCart } from "@/components/order-cart-context";
 import { WhatsAppIcon } from "@/components/whatsapp-icon";
 import { burgers, extraCategories, extras, potatoOrders } from "@/lib/menu";
+import { createWhatsAppUrl } from "@/lib/whatsapp";
 
-const whatsappNumber = "50689742305";
 const orderProducts = [
   ...burgers.map((burger) => ({ ...burger, orderGroup: "burgers" as const })),
   ...extras.map((extra) => ({ ...extra, orderGroup: "extras" as const })),
@@ -38,6 +38,11 @@ export function MenuPageOrdering() {
   const [cartTransparent, setCartTransparent] = useState(false);
   const cartRef = useRef<HTMLElement>(null);
   const cartTriggerRef = useRef<HTMLButtonElement>(null);
+
+  const closeCart = useCallback(() => {
+    setCartOpen(false);
+    setCartTransparent(false);
+  }, []);
 
   const cartItems = useMemo(
     () =>
@@ -75,7 +80,7 @@ export function MenuPageOrdering() {
     if (!cartOpen) return;
 
     const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setCartOpen(false);
+      if (event.key === "Escape") closeCart();
     };
     const closeOnOutsidePointer = (event: PointerEvent) => {
       if (!window.matchMedia("(max-width: 44rem)").matches) return;
@@ -85,7 +90,7 @@ export function MenuPageOrdering() {
         !cartRef.current?.contains(target) &&
         !cartTriggerRef.current?.contains(target)
       ) {
-        setCartOpen(false);
+        closeCart();
       }
     };
 
@@ -95,13 +100,10 @@ export function MenuPageOrdering() {
       window.removeEventListener("keydown", closeOnEscape);
       document.removeEventListener("pointerdown", closeOnOutsidePointer);
     };
-  }, [cartOpen]);
+  }, [cartOpen, closeCart]);
 
   useEffect(() => {
-    if (!cartOpen) {
-      setCartTransparent(false);
-      return;
-    }
+    if (!cartOpen) return;
 
     const makeCartTransparent = () => {
       if (window.matchMedia("(min-width: 44.01rem)").matches) {
@@ -141,11 +143,11 @@ export function MenuPageOrdering() {
       : "Hola, Andy's Burger!";
 
     window.open(
-      `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`,
+      createWhatsAppUrl(message),
       "_blank",
       "noopener,noreferrer",
     );
-    setCartOpen(false);
+    closeCart();
   };
 
   return (
@@ -334,7 +336,7 @@ export function MenuPageOrdering() {
             className="order-cart__minimize"
             type="button"
             aria-label="Minimizar selección"
-            onClick={() => setCartOpen(false)}
+            onClick={closeCart}
           >
             ×
           </button>
@@ -420,7 +422,10 @@ export function MenuPageOrdering() {
         aria-label="Mostrar selección"
         aria-controls="menu-page-order-cart"
         aria-expanded={cartOpen}
-        onClick={() => setCartOpen((current) => !current)}
+        onClick={() => {
+          setCartOpen((current) => !current);
+          setCartTransparent(false);
+        }}
       >
         <span className="mobile-order-actions__cart-icon" aria-hidden="true" />
         {totalProducts > 0 && (
