@@ -5,7 +5,8 @@ import {
 } from "@/lib/images";
 
 const configuredSiteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL?.trim() || "http://localhost:3000";
+  process.env.NEXT_PUBLIC_SITE_URL?.trim() ||
+  "https://andys-burger-website.vercel.app";
 
 export const siteUrl = new URL(configuredSiteUrl).origin;
 export const siteLastModified = new Date("2026-08-04T00:00:00-06:00");
