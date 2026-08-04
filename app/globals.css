@@ -3556,7 +3556,8 @@ button {
 .contact-page__hero,
 .contact-location,
 .contact-hours,
-.contact-services {
+.contact-services,
+.contact-social {
   width: min(100% - 3rem, 76rem);
   margin-inline: auto;
 }
@@ -3784,7 +3785,7 @@ button {
 }
 
 .contact-services {
-  padding-bottom: clamp(6rem, 12vw, 10rem);
+  padding-bottom: 0;
 }
 
 .contact-services__heading {
@@ -3829,9 +3830,96 @@ button {
   margin-top: 2rem;
 }
 
+.contact-social {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(20rem, 1.15fr);
+  gap: clamp(2.5rem, 7vw, 7rem);
+  align-items: start;
+  padding-block: clamp(6rem, 12vw, 10rem);
+}
+
+.contact-social__heading > p {
+  margin: 0 0 0.8rem;
+  color: var(--brand-orange);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.contact-social__heading h2 {
+  margin: 0;
+  color: var(--brand-white);
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1.02;
+  text-wrap: balance;
+}
+
+.contact-social__heading > span {
+  display: block;
+  max-width: 35rem;
+  margin-top: 1.25rem;
+  color: rgb(253 253 253 / 62%);
+  line-height: 1.7;
+}
+
+.contact-social__links {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.contact-social__links a {
+  display: flex;
+  min-height: 5.5rem;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid rgb(253 253 253 / 14%);
+  border-radius: 1rem;
+  background: var(--brand-charcoal);
+  color: var(--brand-white);
+  transition: border-color 0.25s ease, background-color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.contact-social__links a:hover,
+.contact-social__links a:focus-visible {
+  border-color: var(--brand-white);
+  background: rgb(253 253 253 / 6%);
+  transform: translateX(0.25rem);
+}
+
+.contact-social__links a:focus-visible {
+  outline: 2px solid var(--brand-orange);
+  outline-offset: 3px;
+}
+
+.contact-social__links svg {
+  width: 2rem;
+  height: 2rem;
+  flex: 0 0 auto;
+}
+
+.contact-social__links a > span {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.contact-social__links strong {
+  font-size: 1.05rem;
+}
+
+.contact-social__links small {
+  color: rgb(253 253 253 / 50%);
+  font-size: 0.8rem;
+}
+
 @media (max-width: 58rem) {
   .contact-location,
-  .contact-hours {
+  .contact-hours,
+  .contact-social {
     grid-template-columns: 1fr;
   }
 
@@ -3848,7 +3936,8 @@ button {
   .contact-page__hero,
   .contact-location,
   .contact-hours,
-  .contact-services {
+  .contact-services,
+  .contact-social {
     width: min(100% - 1.5rem, 40rem);
   }
 

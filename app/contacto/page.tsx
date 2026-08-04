@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { SocialIcon, type SocialIconName } from "@/components/social-icon";
 import { WhatsAppIcon } from "@/components/whatsapp-icon";
 import { siteImages } from "@/lib/images";
 
@@ -24,6 +25,32 @@ const openingHours = [
   { day: "Sábado", hours: "12:00–10:30 p. m." },
   { day: "Domingo", hours: "12:00–10:30 p. m." },
 ] as const;
+
+const socialLinks: Array<{
+  name: string;
+  handle: string;
+  href: string;
+  icon: SocialIconName;
+}> = [
+  {
+    name: "Instagram",
+    handle: "@andy.sburger",
+    href: "https://www.instagram.com/andy.sburger/",
+    icon: "instagram",
+  },
+  {
+    name: "TikTok",
+    handle: "@andy.sburger",
+    href: "https://www.tiktok.com/@andy.sburger",
+    icon: "tiktok",
+  },
+  {
+    name: "Facebook",
+    handle: "Andy's Burger",
+    href: "https://www.facebook.com/people/Andys-Burger/61567575252356/",
+    icon: "facebook",
+  },
+];
 
 export const metadata: Metadata = {
   title: contactTitle,
@@ -254,10 +281,6 @@ export default function ContactoPage() {
               <dt>Estacionamiento</dt>
               <dd>Disponible en la calle pública</dd>
             </div>
-            <div>
-              <dt>Consumo promedio</dt>
-              <dd>Aproximadamente ₡6 000 por persona</dd>
-            </div>
           </dl>
         </div>
       </section>
@@ -324,6 +347,35 @@ export default function ContactoPage() {
           <WhatsAppIcon />
           <span>Contactar por WhatsApp</span>
         </a>
+      </section>
+
+      <section className="contact-social" aria-labelledby="social-title">
+        <div className="contact-social__heading">
+          <p>Más sabor en tu feed</p>
+          <h2 id="social-title">Seguinos en nuestras redes sociales</h2>
+          <span>
+            Conocé las hamburguesas de Andy&apos;s Burger, novedades del menú y
+            contenido desde San Ramón en Instagram, TikTok y Facebook.
+          </span>
+        </div>
+
+        <nav className="contact-social__links" aria-label="Redes sociales de Andy's Burger">
+          {socialLinks.map((social) => (
+            <a
+              href={social.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Seguir a Andy's Burger en ${social.name}`}
+              key={social.name}
+            >
+              <SocialIcon icon={social.icon} />
+              <span>
+                <strong>{social.name}</strong>
+                <small>{social.handle}</small>
+              </span>
+            </a>
+          ))}
+        </nav>
       </section>
     </main>
   );
