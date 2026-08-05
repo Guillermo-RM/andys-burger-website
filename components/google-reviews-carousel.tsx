@@ -30,6 +30,31 @@ const getPublishedCalendarDay = (publishedOn: string) => {
 };
 
 const formatReviewAge = (publishedOn: string, now: number) => {
+  if (publishedOn.includes("T")) {
+    const elapsedMilliseconds = Math.max(0, now - Date.parse(publishedOn));
+    const elapsedHours = Math.floor(elapsedMilliseconds / 3_600_000);
+
+    if (elapsedHours < 24) {
+      return relativeDateFormatter.format(-Math.max(1, elapsedHours), "hour");
+    }
+
+    const elapsedDays = Math.floor(elapsedMilliseconds / 86_400_000);
+
+    if (elapsedDays < 7) {
+      return relativeDateFormatter.format(-elapsedDays, "day");
+    }
+
+    if (elapsedDays < 30) {
+      return relativeDateFormatter.format(-Math.floor(elapsedDays / 7), "week");
+    }
+
+    if (elapsedDays < 365) {
+      return relativeDateFormatter.format(-Math.floor(elapsedDays / 30), "month");
+    }
+
+    return relativeDateFormatter.format(-Math.floor(elapsedDays / 365), "year");
+  }
+
   const elapsedDays = Math.max(
     0,
     Math.floor(
@@ -53,6 +78,11 @@ const formatReviewAge = (publishedOn: string, now: number) => {
   return relativeDateFormatter.format(-Math.floor(elapsedDays / 365), "year");
 };
 const reviews = [
+  {
+    author: "AllanDV_",
+    publishedOn: "2026-08-04T16:10:00-06:00",
+    text: "Las mejores hamburguesas de occidente, no hay como esas! Recomendadas 100% a ojos cerrados en todo aspecto",
+  },
   {
     author: "Guillermo Rojas",
     publishedOn: "2026-08-01",
@@ -121,7 +151,7 @@ export function GoogleReviewsCarousel() {
         <div className="google-reviews__rating" aria-label="5 de 5 estrellas">
           <strong>5.0</strong>
           <span aria-hidden="true">★★★★★</span>
-          <small>6 reseñas en Google</small>
+          <small>{reviews.length} reseñas en Google</small>
         </div>
       </div>
 

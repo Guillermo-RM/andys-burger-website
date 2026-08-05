@@ -54,7 +54,7 @@ export const businessIdentity = {
   ],
   rating: {
     value: 5,
-    count: 6,
+    count: 7,
     best: 5,
   },
 } as const;
