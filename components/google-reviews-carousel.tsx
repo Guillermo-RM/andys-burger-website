@@ -79,6 +79,61 @@ const formatReviewAge = (publishedOn: string, now: number) => {
 };
 const reviews = [
   {
+    author: "Henry S.",
+    publishedOn: "2026-08-16T19:43:00-06:00",
+    text: "Probamos la Andys Burger y la Spicy Bacon y están muy buenas",
+  },
+  {
+    author: "Jenny HIdalgo",
+    publishedOn: "2026-08-15",
+    text: "Muy recomendado, excelente presentación, entrega y la comida exquisita",
+  },
+  {
+    author: "Kony Alvarado Ulloa",
+    publishedOn: "2026-08-14",
+    text: null,
+  },
+  {
+    author: "Esteban Recio",
+    publishedOn: "2026-08-11",
+    text: "¡Las mejores hamburguesas de San Ramón!",
+  },
+  {
+    author: "Estefanie Garcia",
+    publishedOn: "2026-08-10",
+    text: null,
+  },
+  {
+    author: "Cristina Fernandez",
+    publishedOn: "2026-08-10",
+    text: null,
+  },
+  {
+    author: "María José Salas",
+    publishedOn: "2026-08-10",
+    text: null,
+  },
+  {
+    author: "Ronny Ugalde",
+    publishedOn: "2026-08-10",
+    text: "Las mejores hamburguesas 🤤",
+  },
+  {
+    author: "alondra matamoros",
+    publishedOn: "2026-08-10",
+    text: "Muy buen servicio, bastante calidad y buen sabor",
+  },
+  {
+    author: "Karina Fernández Moya",
+    publishedOn: "2026-08-03",
+    text: "Las hamburguesas son deliciosas, se nota la calidad y el sabor artesanal en cada una. Además, el servicio al cliente es excelente, recomendadas 100%, las mejores de San Ramón sin duda 💯",
+  },
+  {
+    author: "Tata Campos",
+    publishedOn: "2026-08-03",
+    text: "Exelentes hamburguesas, demasiado ricas 👌🏻",
+  },
+  {
     author: "AllanDV_",
     publishedOn: "2026-08-04T16:10:00-06:00",
     text: "Las mejores hamburguesas de occidente, no hay como esas! Recomendadas 100% a ojos cerrados en todo aspecto",
