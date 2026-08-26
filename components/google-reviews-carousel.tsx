@@ -79,18 +79,38 @@ const formatReviewAge = (publishedOn: string, now: number) => {
 };
 const reviews = [
   {
+    author: "Miguel Solano Ramirez",
+    publishedOn: "2026-08-24",
+    text: null,
+  },
+  {
+    author: "Roberth Mora Ferreto",
+    publishedOn: "2026-08-24",
+    text: null,
+  },
+  {
+    author: "Rufino Mora",
+    publishedOn: "2026-08-22",
+    text: "Lo mejor de lo mejor, sin dudas las mejores hamburguesas de occidente, mil por mil recomendado",
+  },
+  {
+    author: "Angie Cruz Sosa",
+    publishedOn: "2026-08-22",
+    text: null,
+  },
+  {
     author: "Henry S.",
-    publishedOn: "2026-08-16T19:43:00-06:00",
+    publishedOn: "2026-08-18",
     text: "Probamos la Andys Burger y la Spicy Bacon y están muy buenas",
   },
   {
     author: "Jenny HIdalgo",
-    publishedOn: "2026-08-15",
+    publishedOn: "2026-08-18",
     text: "Muy recomendado, excelente presentación, entrega y la comida exquisita",
   },
   {
     author: "Kony Alvarado Ulloa",
-    publishedOn: "2026-08-14",
+    publishedOn: "2026-08-18",
     text: null,
   },
   {
@@ -100,37 +120,37 @@ const reviews = [
   },
   {
     author: "Estefanie Garcia",
-    publishedOn: "2026-08-10",
+    publishedOn: "2026-08-11",
     text: null,
   },
   {
     author: "Cristina Fernandez",
-    publishedOn: "2026-08-10",
+    publishedOn: "2026-08-11",
     text: null,
   },
   {
     author: "María José Salas",
-    publishedOn: "2026-08-10",
+    publishedOn: "2026-08-11",
     text: null,
   },
   {
     author: "Ronny Ugalde",
-    publishedOn: "2026-08-10",
+    publishedOn: "2026-08-11",
     text: "Las mejores hamburguesas 🤤",
   },
   {
     author: "alondra matamoros",
-    publishedOn: "2026-08-10",
+    publishedOn: "2026-08-11",
     text: "Muy buen servicio, bastante calidad y buen sabor",
   },
   {
     author: "Karina Fernández Moya",
-    publishedOn: "2026-08-03",
+    publishedOn: "2026-08-11",
     text: "Las hamburguesas son deliciosas, se nota la calidad y el sabor artesanal en cada una. Además, el servicio al cliente es excelente, recomendadas 100%, las mejores de San Ramón sin duda 💯",
   },
   {
     author: "Tata Campos",
-    publishedOn: "2026-08-03",
+    publishedOn: "2026-08-11",
     text: "Exelentes hamburguesas, demasiado ricas 👌🏻",
   },
   {
@@ -142,11 +162,6 @@ const reviews = [
     author: "Guillermo Rojas",
     publishedOn: "2026-08-01",
     text: "Es demasiado bueno🔥",
-  },
-  {
-    author: "Kevin Andres Arroyo Sanchez",
-    publishedOn: "2026-08-01",
-    text: null,
   },
   {
     author: "Alejandro Chaves Apu",
@@ -165,7 +180,7 @@ const reviews = [
   },
   {
     author: "Yoryaa Calderon",
-    publishedOn: "2026-07-28",
+    publishedOn: "2026-08-01",
     text: "Excelente servicio, la comida espectacular las hamburguesas son las mejores de San Ramón son súper grandes, recomendadisimo 20/10✨",
   },
 ] as const;
