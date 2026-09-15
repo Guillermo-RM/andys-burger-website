@@ -32,6 +32,15 @@ const getPublishedCalendarDay = (publishedOn: string) => {
 const formatReviewAge = (publishedOn: string, now: number) => {
   if (publishedOn.includes("T")) {
     const elapsedMilliseconds = Math.max(0, now - Date.parse(publishedOn));
+    const elapsedMinutes = Math.floor(elapsedMilliseconds / 60_000);
+
+    if (elapsedMinutes < 60) {
+      return relativeDateFormatter.format(
+        -Math.max(1, elapsedMinutes),
+        "minute",
+      );
+    }
+
     const elapsedHours = Math.floor(elapsedMilliseconds / 3_600_000);
 
     if (elapsedHours < 24) {
@@ -79,6 +88,41 @@ const formatReviewAge = (publishedOn: string, now: number) => {
 };
 const reviews = [
   {
+    author: "césar josué alvarez salas",
+    publishedOn: "2026-09-15T10:15:51-06:00",
+    text: "El sabor de las tortas y y todo es inigualable",
+  },
+  {
+    author: "Gerald Araya Salazar",
+    publishedOn: "2026-09-15T10:11:51-06:00",
+    text: null,
+  },
+  {
+    author: "Angelo Fuentes Jimenez",
+    publishedOn: "2026-09-08",
+    text: "Súper buena calidad los ingredientes y demasiado buen sabor en todas las hamburguesas que hay en su menú",
+  },
+  {
+    author: "Nicole Espinoza Herrera",
+    publishedOn: "2026-09-08",
+    text: "La comida es excelente, los productos son muy frescos, en buenas porciones y calidad. El servicio al cliente es increíble, muy rápidos y eficientes.",
+  },
+  {
+    author: "Kevin Salazar Rodriguez",
+    publishedOn: "2026-09-08",
+    text: "Excelente sabor, ingredientes consistentes en toda la hamburguesa, hamburguesa jugosa",
+  },
+  {
+    author: "Sharlyn Fernandez vega",
+    publishedOn: "2026-09-08",
+    text: "Definitivamente de las mejores hamburguesa de San Ramón🍔🤤 Súper grande, bien preparada y con un sabor increíble 100% recomendada 🙌",
+  },
+  {
+    author: "Jonathan Palma Mata",
+    publishedOn: "2026-08-25",
+    text: "Sin duda alguna las mejores Hamburguesas de San Ramón! Siempre la calidad por encima de todo! 🫶🏼",
+  },
+  {
     author: "Miguel Solano Ramirez",
     publishedOn: "2026-08-24",
     text: null,
@@ -110,7 +154,7 @@ const reviews = [
   },
   {
     author: "Kony Alvarado Ulloa",
-    publishedOn: "2026-08-18",
+    publishedOn: "2026-08-11",
     text: null,
   },
   {
@@ -190,7 +234,7 @@ export function GoogleReviewsCarousel() {
   const [now, setNow] = useState(() => Date.now());
 
   useEffect(() => {
-    const timer = window.setInterval(() => setNow(Date.now()), 3_600_000);
+    const timer = window.setInterval(() => setNow(Date.now()), 60_000);
     return () => window.clearInterval(timer);
   }, []);
 

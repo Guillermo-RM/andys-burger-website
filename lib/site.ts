@@ -8,7 +8,7 @@ const configuredSiteUrl =
   process.env.NEXT_PUBLIC_SITE_URL?.trim() || "https://andysburger.com";
 
 export const siteUrl = new URL(configuredSiteUrl).origin;
-export const siteLastModified = new Date("2026-08-25T00:00:00-06:00");
+export const siteLastModified = new Date("2026-09-15T00:00:00-06:00");
 
 export const absoluteUrl = (path = "/") =>
   new URL(path, `${siteUrl}/`).toString();
@@ -54,7 +54,7 @@ export const businessIdentity = {
   ],
   rating: {
     value: 5,
-    count: 21,
+    count: 28,
     best: 5,
   },
 } as const;
