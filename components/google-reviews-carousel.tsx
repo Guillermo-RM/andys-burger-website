@@ -89,13 +89,43 @@ const formatReviewAge = (publishedOn: string, now: number) => {
 const reviews = [
   {
     author: "césar josué alvarez salas",
-    publishedOn: "2026-09-15T10:15:51-06:00",
+    publishedOn: "2026-09-27",
     text: "El sabor de las tortas y y todo es inigualable",
+  },
+  {
+    author: "Jostinleondelgado",
+    publishedOn: "2026-09-23",
+    text: null,
+  },
+  {
+    author: "Cristy Fernández",
+    publishedOn: "2026-09-23",
+    text: "Atienden súper bien y entregan las hamburguesas demasiado rápido y demasiado deliciosas ❤️‍🔥",
+  },
+  {
+    author: "Alejandro Solórzano",
+    publishedOn: "2026-09-23",
+    text: "Excelente buenas burgers",
+  },
+  {
+    author: "Leslie Duran",
+    publishedOn: "2026-09-23",
+    text: "Excelente servicio y comida. 🙌🏻⭐️",
+  },
+  {
+    author: "Glenda Benavides",
+    publishedOn: "2026-09-16",
+    text: "Las mejores hamburguesas de san Ramón",
   },
   {
     author: "Gerald Araya Salazar",
     publishedOn: "2026-09-15T10:11:51-06:00",
     text: null,
+  },
+  {
+    author: "Luis Jiménez",
+    publishedOn: "2026-09-16",
+    text: "Las mejores burgués de occidente",
   },
   {
     author: "Angelo Fuentes Jimenez",
