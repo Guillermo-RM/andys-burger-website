@@ -88,6 +88,16 @@ const formatReviewAge = (publishedOn: string, now: number) => {
 };
 const reviews = [
   {
+    author: "Paul Ramirez",
+    publishedOn: "2026-10-02T21:44:54-06:00",
+    text: null,
+  },
+  {
+    author: "Carlos Andres Castro Vargas",
+    publishedOn: "2026-10-02",
+    text: "Excelente atención. Hamburguesas deliciosas. Súper recomendado!",
+  },
+  {
     author: "césar josué alvarez salas",
     publishedOn: "2026-09-27",
     text: "El sabor de las tortas y y todo es inigualable",
@@ -109,7 +119,7 @@ const reviews = [
   },
   {
     author: "Leslie Duran",
-    publishedOn: "2026-09-23",
+    publishedOn: "2026-09-19",
     text: "Excelente servicio y comida. 🙌🏻⭐️",
   },
   {
