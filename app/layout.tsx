@@ -14,7 +14,7 @@ import { siteImages } from "@/lib/images";
 import "./globals.css";
 
 const googleTagManagerId =
-  process.env.NEXT_PUBLIC_GTM_ID?.trim() || "GTM-KLLPKKG3";
+  process.env.NEXT_PUBLIC_GTM_ID?.trim() || "GTM-P3DQCN27";
 const defaultTitle = "Hamburguesas San Ramón | Andy's Burger";
 const defaultDescription = businessIdentity.description;
 
