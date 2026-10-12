@@ -111,6 +111,13 @@ button {
   will-change: auto;
 }
 
+/* Keep the floating order controls attached to the viewport while the menu fades in. */
+.burger-menu.scroll-reveal {
+  transform: none;
+  will-change: opacity;
+  transition-property: opacity;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .route-transition {
     animation: none;
@@ -1562,7 +1569,7 @@ button {
     position: fixed;
     z-index: 70;
     right: 0.9rem;
-    bottom: 0.9rem;
+    bottom: 5.15rem;
     display: flex;
     flex-direction: column;
     gap: 0.7rem;
