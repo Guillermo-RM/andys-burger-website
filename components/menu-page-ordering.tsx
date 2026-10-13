@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { MenuSectionNavigation } from "@/components/menu-section-navigation";
 import { useOrderCart } from "@/components/order-cart-context";
 import { WhatsAppIcon } from "@/components/whatsapp-icon";
+import { trackWhatsAppClick } from "@/lib/analytics";
 import { burgers, extraCategories, extras, potatoOrders } from "@/lib/menu";
 import { createWhatsAppUrl } from "@/lib/whatsapp";
 
@@ -141,6 +142,21 @@ export function MenuPageOrdering() {
           "Por favor, confirmame la disponibilidad y el total final.",
         ].join("\n")
       : "Hola, Andy's Burger!";
+
+    trackWhatsAppClick({
+      buttonId: "whatsapp-menu-cart",
+      buttonLocation: "menu_cart",
+      contactType: "order_intent",
+      cartValue: cartItems.reduce(
+        (total, product) => total + product.price * product.quantity,
+        0,
+      ),
+      items: cartItems.map((product) => ({
+        item_id: product.id,
+        item_name: product.name,
+        quantity: product.quantity,
+      })),
+    });
 
     window.open(
       createWhatsAppUrl(message),
@@ -402,8 +418,12 @@ export function MenuPageOrdering() {
           {cartItems.length > 0 && (
             <div className="order-cart__summary">
               <button
+                id="whatsapp-menu-cart"
                 className="order-cart__order"
                 type="button"
+                data-analytics="whatsapp"
+                data-location="menu_cart"
+                data-action="order_intent"
                 onClick={sendOrder}
               >
                 <WhatsAppIcon />

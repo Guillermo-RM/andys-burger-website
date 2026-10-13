@@ -1,6 +1,7 @@
 import { WhatsAppIcon } from "@/components/whatsapp-icon";
 import { whatsappGreetingUrl } from "@/lib/whatsapp";
 import { SocialIcon } from "@/components/social-icon";
+import { TrackedWhatsAppLink } from "@/components/tracked-whatsapp-link";
 
 const googleMapsEmbedUrl =
   "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3927.9191987430827!2d-84.4650583!3d10.1056999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8fa0450051232683%3A0xcace868bb64699d6!2sAndy's%20Burger!5e0!3m2!1ses!2scr!4v1785863337534!5m2!1ses!2scr";
@@ -44,7 +45,9 @@ export function SiteFooter() {
               Hamburguesas al grill preparadas al momento para llevar o recibir
               por servicio exprés en San Ramón, Alajuela.
             </p>
-            <a
+            <TrackedWhatsAppLink
+              id="whatsapp-footer"
+              analyticsLocation="footer"
               className="site-footer__order"
               href={whatsappGreetingUrl}
               target="_blank"
@@ -52,7 +55,7 @@ export function SiteFooter() {
             >
               <WhatsAppIcon />
               <span>Pedir por WhatsApp</span>
-            </a>
+            </TrackedWhatsAppLink>
           </section>
 
           <section className="site-footer__column" aria-labelledby="footer-contact">

@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useOrderCart } from "@/components/order-cart-context";
 import { WhatsAppIcon } from "@/components/whatsapp-icon";
+import { trackWhatsAppClick } from "@/lib/analytics";
 import { burgers, extraCategories, extras, potatoOrders } from "@/lib/menu";
 import { createWhatsAppUrl } from "@/lib/whatsapp";
 
@@ -128,6 +129,21 @@ export function HomeBurgerMenu() {
             "Por favor, confirmame la disponibilidad y el total final.",
           ].join("\n")
         : "Hola, Andy's Burger!";
+
+    trackWhatsAppClick({
+      buttonId: "whatsapp-home-cart",
+      buttonLocation: "home_cart",
+      contactType: "order_intent",
+      cartValue: cartItems.reduce(
+        (total, product) => total + product.price * product.quantity,
+        0,
+      ),
+      items: cartItems.map((product) => ({
+        item_id: product.id,
+        item_name: product.name,
+        quantity: product.quantity,
+      })),
+    });
 
     window.open(
       createWhatsAppUrl(message),
@@ -421,8 +437,12 @@ export function HomeBurgerMenu() {
           {cartItems.length > 0 && (
             <div className="order-cart__summary">
               <button
+                id="whatsapp-home-cart"
                 className="order-cart__order"
                 type="button"
+                data-analytics="whatsapp"
+                data-location="home_cart"
+                data-action="order_intent"
                 aria-label="Enviar selección por WhatsApp; abre una nueva ventana"
                 onClick={sendOrder}
               >

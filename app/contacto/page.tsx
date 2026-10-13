@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { SocialIcon, type SocialIconName } from "@/components/social-icon";
 import { WhatsAppIcon } from "@/components/whatsapp-icon";
+import { TrackedWhatsAppLink } from "@/components/tracked-whatsapp-link";
 import { createImageStructuredData, siteImages } from "@/lib/images";
 import { whatsappGreetingUrl } from "@/lib/whatsapp";
 import { absoluteUrl, businessId, websiteId } from "@/lib/site";
@@ -146,7 +147,9 @@ export default function ContactoPage() {
           exacta para retirar tu pedido.
         </span>
         <div className="contact-page__actions" aria-label="Opciones de contacto">
-          <a
+          <TrackedWhatsAppLink
+            id="whatsapp-contact-hero"
+            analyticsLocation="contact_hero"
             className="contact-page__button contact-page__button--whatsapp"
             href={whatsappGreetingUrl}
             target="_blank"
@@ -154,7 +157,7 @@ export default function ContactoPage() {
           >
             <WhatsAppIcon />
             <span>Pedir por WhatsApp</span>
-          </a>
+          </TrackedWhatsAppLink>
           <a className="contact-page__button" href={businessPhoneHref}>
             Llamar al negocio
           </a>
@@ -268,7 +271,9 @@ export default function ContactoPage() {
           </article>
         </div>
 
-        <a
+        <TrackedWhatsAppLink
+          id="whatsapp-contact-services"
+          analyticsLocation="contact_services"
           className="contact-page__button contact-page__button--whatsapp contact-services__cta"
           href={whatsappGreetingUrl}
           target="_blank"
@@ -276,7 +281,7 @@ export default function ContactoPage() {
         >
           <WhatsAppIcon />
           <span>Contactar por WhatsApp</span>
-        </a>
+        </TrackedWhatsAppLink>
       </section>
 
       <section className="contact-social" aria-labelledby="social-title">
