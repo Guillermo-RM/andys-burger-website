@@ -107,8 +107,8 @@ export const businessStructuredData = {
   address: {
     "@type": "PostalAddress",
     streetAddress: businessIdentity.address.street,
-    addressLocality: businessIdentity.address.locality,
-    addressRegion: `${businessIdentity.address.municipality}, ${businessIdentity.address.region}`,
+    addressLocality: businessIdentity.address.municipality,
+    addressRegion: businessIdentity.address.region,
     postalCode: businessIdentity.address.postalCode,
     addressCountry: businessIdentity.address.countryCode,
   },

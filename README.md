@@ -18,7 +18,7 @@ configura mediante `NEXT_PUBLIC_SITE_URL`. En local se utiliza
 Para producción en Vercel se utilizan:
 
 ```powershell
-$env:NEXT_PUBLIC_SITE_URL="https://www.andysburger.com"
+$env:NEXT_PUBLIC_SITE_URL="https://andysburger.com"
 $env:NEXT_PUBLIC_GTM_ID="GTM-KLLPKKG3"
 npm run build
 ```
@@ -45,11 +45,11 @@ Vercel debe detectar automáticamente el framework y ejecutar `npm run build`.
 
 Configura en Vercel, para Producción, Preview y Desarrollo:
 
-- `NEXT_PUBLIC_SITE_URL=https://www.andysburger.com`
+- `NEXT_PUBLIC_SITE_URL=https://andysburger.com`
 - `NEXT_PUBLIC_GTM_ID=GTM-KLLPKKG3`
 
-Después de conectar el dominio, redirige el dominio sin `www` hacia
-`www.andysburger.com` para conservar una sola URL canónica.
+Después de conectar el dominio, redirige `www.andysburger.com` hacia
+`andysburger.com` para conservar una sola URL canónica.
 
 ## Estructura principal
 
