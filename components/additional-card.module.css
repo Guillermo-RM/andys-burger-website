@@ -1,0 +1,20 @@
+.card { align-content: start; }
+
+.picker { grid-column: 1 / -1; min-width: 0; margin-top: .35rem; }
+.caption { display: block; margin-bottom: .7rem; color: #fdfdfd; font-size: .9rem; font-weight: 800; }
+.control { min-width: 0; }
+.trigger { display: flex; align-items: center; justify-content: space-between; gap: 1.25rem; width: 100%; min-height: 3.25rem; padding: .85rem 1rem; border: 1px solid #555; border-radius: .75rem; background: #010101; color: #fdfdfd; font: inherit; text-align: left; cursor: pointer; transition: border-color .25s, box-shadow .25s; }
+.trigger:hover, .trigger[aria-expanded="true"] { border-color: #f99804; }
+.trigger:focus-visible { outline: 2px solid #f99804; outline-offset: 3px; }
+.arrow { width: 1.25rem; height: 1.25rem; flex: 0 0 1.25rem; color: #f99804; transition: transform .3s ease; }
+.trigger[aria-expanded="true"] .arrow { transform: rotate(180deg); }
+.panel { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows .3s ease, opacity .25s ease; }
+.panel[data-open="true"] { grid-template-rows: 1fr; opacity: 1; }
+.inner { min-height: 0; overflow: hidden; }
+.options { margin-top: .5rem; padding: .35rem; border: 1px solid #f99804; border-radius: .75rem; background: #010101; }
+.picker .options .option { display: flex; align-items: center; gap: .85rem; min-height: 3rem; padding: .8rem .85rem; margin: 0; border: 0; border-radius: .45rem; color: #fdfdfd; font-size: .9rem; font-weight: 600; line-height: 1.5; cursor: pointer; transition: background-color .2s, color .2s; }
+.picker .options .option:hover, .picker .options .option:has(input:checked) { background: #121414; color: #f99804; }
+.picker .options .option:focus-within { outline: 2px solid #f99804; outline-offset: -2px; }
+.picker .options .option input { appearance: none; display: block; flex: 0 0 1.15rem; width: 1.15rem; height: 1.15rem; margin: 0; border: 2px solid #aaa; border-radius: 50%; background: #010101; }
+.picker .options .option input:checked { border-color: #f99804; background: #f99804; box-shadow: inset 0 0 0 3px #010101; }
+@media(prefers-reduced-motion: reduce) { .trigger, .arrow, .panel, .picker .options .option { transition: none; } }

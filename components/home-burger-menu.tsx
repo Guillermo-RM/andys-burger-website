@@ -2,16 +2,17 @@
 
 import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { AdditionalCard } from "@/components/additional-card";
 import { useOrderCart } from "@/components/order-cart-context";
 import { WhatsAppIcon } from "@/components/whatsapp-icon";
 import { trackWhatsAppClick } from "@/lib/analytics";
-import { burgers, extraCategories, extras, potatoOrders } from "@/lib/menu";
+import { additionalOrderProducts, burgers, extraCategories, extras, potatoOrders } from "@/lib/menu";
 import { createWhatsAppUrl } from "@/lib/whatsapp";
 
 const orderProducts = [
   ...burgers.map((burger) => ({ ...burger, orderGroup: "burgers" as const })),
   ...extras.map((extra) => ({ ...extra, orderGroup: "extras" as const })),
-  ...potatoOrders.map((potato) => ({
+  ...additionalOrderProducts.map((potato) => ({
     ...potato,
     orderGroup: "potatoes" as const,
   })),
@@ -62,7 +63,7 @@ export function HomeBurgerMenu() {
     },
     {
       id: "potatoes",
-      title: "Órdenes de papas",
+      title: "Adicionales",
       items: cartItems.filter((product) => product.orderGroup === "potatoes"),
       alwaysVisible: false,
     },
@@ -103,7 +104,7 @@ export function HomeBurgerMenu() {
     const orderSections = [
       { title: "HAMBURGUESAS", orderGroup: "burgers" },
       { title: "EXTRAS", orderGroup: "extras" },
-      { title: "ÓRDENES DE PAPAS", orderGroup: "potatoes" },
+      { title: "ADICIONALES", orderGroup: "potatoes" },
     ]
       .map(({ title, orderGroup }) => {
         const lines = cartItems
@@ -307,43 +308,14 @@ export function HomeBurgerMenu() {
           >
             <div className="potato-orders__heading">
               <p>Para acompañar</p>
-              <h2 id="potato-orders-title">Órdenes adicionales de papas</h2>
+              <h2 id="potato-orders-title">Adicionales</h2>
               <span>
-                Agregá una orden completa de papas gajo o crispy a tu pedido.
+                Agregá papas, aros de cebolla o Chilli Poppers a tu pedido.
               </span>
             </div>
 
             <div className="potato-orders__grid">
-              {potatoOrders.map((potato) => {
-                const isInCart = (cart[potato.id] ?? 0) > 0;
-
-                return (
-                  <article
-                    className="potato-order-card"
-                    data-in-cart={isInCart}
-                    key={potato.id}
-                  >
-                    <span className="potato-order-card__emoji" aria-hidden="true">
-                      {potato.emoji}
-                    </span>
-                    <div>
-                      <h3>{potato.name}</h3>
-                      <p>{potato.description}</p>
-                    </div>
-                    <strong>{formatColones(potato.price)}</strong>
-                    <label>
-                      <input
-                        type="checkbox"
-                        checked={isInCart}
-                        onChange={(event) =>
-                          toggleProduct(potato.id, event.target.checked)
-                        }
-                      />
-                      <span>Agregar al pedido</span>
-                    </label>
-                  </article>
-                );
-              })}
+          {potatoOrders.map((item) => <AdditionalCard key={item.id} item={item} />)}
             </div>
           </section>
         </div>

@@ -85,7 +85,7 @@ ${burgerMenu}
 
 ${extrasMenu}
 
-## Órdenes adicionales de papas
+## Adicionales
 
 ${potatoesMenu}
 

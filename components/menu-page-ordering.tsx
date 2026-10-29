@@ -3,16 +3,17 @@
 import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { MenuSectionNavigation } from "@/components/menu-section-navigation";
+import { AdditionalCard } from "@/components/additional-card";
 import { useOrderCart } from "@/components/order-cart-context";
 import { WhatsAppIcon } from "@/components/whatsapp-icon";
 import { trackWhatsAppClick } from "@/lib/analytics";
-import { burgers, extraCategories, extras, potatoOrders } from "@/lib/menu";
+import { additionalOrderProducts, burgers, extraCategories, extras, potatoOrders } from "@/lib/menu";
 import { createWhatsAppUrl } from "@/lib/whatsapp";
 
 const orderProducts = [
   ...burgers.map((burger) => ({ ...burger, orderGroup: "burgers" as const })),
   ...extras.map((extra) => ({ ...extra, orderGroup: "extras" as const })),
-  ...potatoOrders.map((potato) => ({
+  ...additionalOrderProducts.map((potato) => ({
     ...potato,
     orderGroup: "potatoes" as const,
   })),
@@ -67,7 +68,7 @@ export function MenuPageOrdering() {
     },
     {
       id: "potatoes",
-      title: "Órdenes de papas",
+      title: "Adicionales",
       items: cartItems.filter((product) => product.orderGroup === "potatoes"),
       alwaysVisible: false,
     },
@@ -120,7 +121,7 @@ export function MenuPageOrdering() {
     const sections = [
       { title: "HAMBURGUESAS", group: "burgers" },
       { title: "EXTRAS", group: "extras" },
-      { title: "ÓRDENES DE PAPAS", group: "potatoes" },
+      { title: "ADICIONALES", group: "potatoes" },
     ]
       .map(({ title, group }) => {
         const lines = cartItems
@@ -295,44 +296,14 @@ export function MenuPageOrdering() {
       <section className="menu-potatoes" aria-labelledby="menu-potatoes-title">
         <div className="menu-addons__heading">
           <p>El acompañamiento completo</p>
-          <h2 id="menu-potatoes-title">Órdenes adicionales de papas</h2>
+          <h2 id="menu-potatoes-title">Adicionales</h2>
           <span>
-            Sumá papas gajo sazonadas o papas crispy a tu pedido de
-            hamburguesas en San Ramón.
+            Sumá papas, aros de cebolla o Chilli Poppers a tu pedido.
           </span>
         </div>
 
         <div className="potato-orders__grid">
-          {potatoOrders.map((potato) => {
-            const isInCart = (cart[potato.id] ?? 0) > 0;
-
-            return (
-              <article
-                className="potato-order-card"
-                data-in-cart={isInCart}
-                key={potato.id}
-              >
-                <span className="potato-order-card__emoji" aria-hidden="true">
-                  {potato.emoji}
-                </span>
-                <div>
-                  <h3>{potato.name}</h3>
-                  <p>{potato.description}</p>
-                </div>
-                <strong>{formatColones(potato.price)}</strong>
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={isInCart}
-                    onChange={(event) =>
-                      toggleProduct(potato.id, event.target.checked)
-                    }
-                  />
-                  <span>Agregar al pedido</span>
-                </label>
-              </article>
-            );
-          })}
+          {potatoOrders.map((item) => <AdditionalCard key={item.id} item={item} />)}
         </div>
       </section>
 

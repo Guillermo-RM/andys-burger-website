@@ -30,6 +30,7 @@ export type PotatoOrder = {
   price: number;
   emoji: string;
   description: string;
+  dressings?: boolean;
 };
 
 export const burgers: Burger[] = [
@@ -45,7 +46,7 @@ export const burgers: Burger[] = [
   {
     id: "bacon",
     name: "Bacon",
-    price: 5500,
+    price: 5700,
     description: "Carne de 200 g, tocineta y chipotle en una combinación intensa, cremosa y ahumada.",
     ingredients:
       "Hongos, cebolla, jamón, torta de carne de 200 g, tocineta, queso amarillo, queso mozzarella y salsa chipotle.",
@@ -54,7 +55,7 @@ export const burgers: Burger[] = [
   {
     id: "andys",
     name: "Andy's",
-    price: 5200,
+    price: 5400,
     description: "El sabor clásico de Andy's: carne de 200 g, jamón, dos quesos y nuestra salsa de la casa.",
     ingredients:
       "Lechuga, tomate, hongos, cebolla, jamón, torta de carne de 200 g, queso amarillo, queso mozzarella y salsa de la casa.",
@@ -63,7 +64,7 @@ export const burgers: Burger[] = [
   {
     id: "spicy",
     name: "Spicy",
-    price: 5200,
+    price: 5400,
     description: "Carne de 200 g con jalapeño dentro de la torta para disfrutar un picante sabroso de principio a fin.",
     ingredients:
       "Lechuga, tomate, hongos, cebolla, jamón, torta de carne de 200 g con jalapeño, queso amarillo, queso mozzarella y salsa de la casa.",
@@ -72,7 +73,7 @@ export const burgers: Burger[] = [
   {
     id: "chicken-andys",
     name: "Chicken Andy's",
-    price: 5000,
+    price: 5200,
     description: "Pollo empanizado crujiente, dos quesos y salsa tártara para una mordida llena de textura.",
     ingredients:
       "Lechuga, tomate, salsa tártara, hongos, cebolla, pollo empanizado, queso amarillo y queso mozzarella.",
@@ -81,7 +82,7 @@ export const burgers: Burger[] = [
   {
     id: "guacamole",
     name: "Guacamole",
-    price: 5200,
+    price: 5400,
     description: "Carne de 200 g, guacamole cremoso y dos quesos en una hamburguesa fresca y abundante.",
     ingredients:
       "Hongos, cebolla, torta de carne de 200 g, queso amarillo, queso mozzarella, guacamole y salsa de la casa.",
@@ -90,7 +91,7 @@ export const burgers: Burger[] = [
   {
     id: "bbq-deluxe",
     name: "BBQ Deluxe",
-    price: 5500,
+    price: 5700,
     description: "Tocineta, pepinillos, carne de 200 g y salsa BBQ para quienes buscan un sabor ahumado y potente.",
     ingredients:
       "Hongos, cebolla, tocineta, pepinillos, torta de carne de 200 g, queso amarillo, queso mozzarella, salsa BBQ y salsa de la casa.",
@@ -99,7 +100,7 @@ export const burgers: Burger[] = [
   {
     id: "andys-junior",
     name: "Andy's Junior",
-    price: 4500,
+    price: 4800,
     description: "Nuestra opción compacta con carne de 120 g, jamón, dos quesos, vegetales y salsa de la casa.",
     ingredients:
       "Lechuga, tomate, hongos, cebolla, jamón, torta de carne de 120 g, queso amarillo, queso mozzarella y salsa de la casa.",
@@ -108,7 +109,7 @@ export const burgers: Burger[] = [
   {
     id: "chicken-guacamole",
     name: "Chicken Guacamole",
-    price: 5500,
+    price: 5700,
     description: "Pollo empanizado, guacamole y tocineta: una combinación crujiente, cremosa y difícil de soltar.",
     ingredients:
       "Pechuga de pollo empanizada, lechuga, tomate, queso amarillo, queso mozzarella, jamón, tocineta, hongos, cebolla, guacamole y salsa especial de la casa.",
@@ -117,7 +118,7 @@ export const burgers: Burger[] = [
   {
     id: "cheddar-lab",
     name: "Cheddar Lab",
-    price: 5500,
+    price: 5700,
     description: "Una explosión de queso cheddar servida en jeringa, con tocineta, mozzarella y jamón.",
     ingredients:
       "Pan, 20 cc de queso cheddar en jeringa, queso amarillo, queso mozzarella, jamón, tocineta, mayonesa de la casa, salsa de tomate, pepinillos y cebolla.",
@@ -126,7 +127,7 @@ export const burgers: Burger[] = [
   {
     id: "tropical-bite",
     name: "Tropical Bite",
-    price: 5500,
+    price: 5700,
     description: "Piña, BBQ y tocineta se unen con carne de 200 g para lograr el balance perfecto entre dulce y salado.",
     ingredients:
       "Mermelada de piña, piña, salsa BBQ, hongos, cebolla, tocineta, torta de carne de 200 g, queso amarillo, queso mozzarella y jamón.",
@@ -135,7 +136,7 @@ export const burgers: Burger[] = [
   {
     id: "honey-bacon",
     name: "Honey Bacon",
-    price: 5500,
+    price: 5700,
     description: "Pan brioche, carne de 200 g y miel de tocineta para una experiencia dulce, salada y jugosa.",
     ingredients:
       "Salsa rosada, torta de carne de 200 g, pan brioche, queso amarillo, queso mozzarella, jamón y miel de tocineta.",
@@ -144,7 +145,7 @@ export const burgers: Burger[] = [
   {
     id: "spicy-bacon",
     name: "Spicy Bacon",
-    price: 5500,
+    price: 5700,
     description: "Carne de 200 g, pan brioche y aderezo de tocineta picante en ambos panes para cerrar con fuego.",
     ingredients:
       "Torta de carne de 200 g, jamón, queso mozzarella, queso amarillo, pan brioche y aderezo de tocineta picante en ambos panes.",
@@ -272,4 +273,12 @@ export const potatoOrders: PotatoOrder[] = [
     emoji: "🍟",
     description: "Orden adicional de papas crispy crujientes.",
   },
+  { id: "aros-cebolla", name: "Orden de aros de cebolla", price: 2800, emoji: "🧅", description: "Con aderezo a escoger: chipotle de la casa, mayonesa de la casa o tártara.", dressings: true },
+  { id: "chilli-poppers", name: "Orden de Chilli Poppers", price: 3800, emoji: "🌶️", description: "Con aderezo a escoger: chipotle de la casa, mayonesa de la casa o tártara.", dressings: true },
 ];
+
+
+export const dressingOptions = ["Chipotle de la casa", "Mayonesa de la casa", "Tártara"] as const;
+export const additionalOrderProducts = potatoOrders.flatMap((item) =>
+  item.dressings ? dressingOptions.map((dressing, index) => ({ ...item, id: `${item.id}-aderezo-${index}`, name: `${item.name} — ${dressing}` })) : [item],
+);

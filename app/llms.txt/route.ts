@@ -15,7 +15,7 @@ export function GET() {
 - Opciones con carne de res, pollo empanizado, bacon, guacamole, quesos y sabores picantes.
 - Todas las hamburguesas incluyen papas gajo o crispy.
 - Extras de carne, quesos, vegetales, salsas y sabores especiales.
-- Órdenes adicionales de papas gajo y papas crispy.
+- Adicionales: papas gajo, papas crispy, aros de cebolla y Chilli Poppers.
 - Pedidos para llevar desde una ventanilla y entrega a domicilio en San Ramón.
 
 ## Información oficial
@@ -37,7 +37,7 @@ ${hours}
 ## Páginas principales
 
 - [Inicio](${absoluteUrl("/")}): presentación, menú, carrito, razones para elegir Andy's Burger y reseñas.
-- [Menú completo](${absoluteUrl("/menu")}): hamburguesas, ingredientes, precios, extras y órdenes de papas.
+- [Menú completo](${absoluteUrl("/menu")}): hamburguesas, ingredientes, precios, extras y adicionales.
 - [Contacto y ubicación](${absoluteUrl("/contacto")}): mapa, dirección, teléfono, horario, entrega y redes sociales.
 - [Información completa para asistentes](${absoluteUrl("/llms-full.txt")}): ficha detallada del negocio y menú completo en texto.
 - [Google Maps](${businessIdentity.googleMapsUrl})

@@ -101,7 +101,7 @@ const menuStructuredData = {
     },
     {
       "@type": "MenuSection",
-      name: "Órdenes adicionales de papas",
+      name: "Adicionales",
       hasMenuItem: potatoOrders.map((potato) => ({
         "@type": "MenuItem",
         name: potato.name,

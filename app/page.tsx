@@ -141,9 +141,9 @@ const homeStructuredData = {
         },
         {
           "@type": "MenuSection",
-          name: "Órdenes adicionales de papas",
+          name: "Adicionales",
           description:
-            "Órdenes extra de papas gajo y papas crispy de Andy's Burger en San Ramón.",
+            "Papas, aros de cebolla y Chilli Poppers de Andy's Burger en San Ramón.",
           hasMenuItem: potatoOrders.map((potato) => ({
             "@type": "MenuItem",
             name: potato.name,
