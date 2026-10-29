@@ -262,14 +262,14 @@ export const potatoOrders: PotatoOrder[] = [
   {
     id: "orden-papas-gajo",
     name: "Orden de papas gajo",
-    price: 2300,
+    price: 2500,
     emoji: "🥔",
     description: "Orden adicional de papas gajo sazonadas.",
   },
   {
     id: "orden-papas-crispy",
     name: "Orden de papas crispy",
-    price: 2000,
+    price: 2200,
     emoji: "🍟",
     description: "Orden adicional de papas crispy crujientes.",
   },
