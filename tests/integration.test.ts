@@ -99,7 +99,7 @@ test("el panel protege Facturas y publica los precios en el website", { timeout:
   const storage = `http://127.0.0.1:${address.port}`;
   const panelUrl = "http://127.0.0.1:40331";
   const password = "clave-para-este-flujo-local";
-  const menuStorage = useSheets
+  const menuStorage: Record<string, string> = useSheets
     ? { MENU_SHEETS_SCRIPT_URL: `${storage}/menu-sheet`, MENU_SHEETS_SECRET: "test-menu-sheet" }
     : {
       MENU_REDIS_URL: `${storage}/menu`, MENU_PRICE_KEY: "integration:prices",
