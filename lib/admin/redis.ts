@@ -1,6 +1,6 @@
 import { configuredUrl, required } from "./config.ts";
 
-export async function redis<T>(scope: "AUTH" | "MENU", ...command: (string | number)[]) {
+export async function redis<T>(scope: "MENU", ...command: (string | number)[]) {
   const url = configuredUrl(required(`${scope}_REDIS_URL`));
   const response = await fetch(url, {
     method: "POST",

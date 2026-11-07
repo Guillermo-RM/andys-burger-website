@@ -6,7 +6,7 @@ import { cookieName, hasSession } from "./session";
 export const isSignedIn = cache(async () => {
   const jar = await cookies();
   try {
-    return await hasSession(jar.get(cookieName())?.value);
+    return hasSession(jar.get(cookieName())?.value);
   } catch {
     console.error("admin.session_unavailable");
     return false;

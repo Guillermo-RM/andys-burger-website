@@ -8,10 +8,31 @@ import { resolve } from "node:path";
 import { readFileSync } from "node:fs";
 import { runInNewContext } from "node:vm";
 import { createPasswordHash } from "../lib/admin/password.ts";
+import { createSession, hasSession } from "../lib/admin/session.ts";
+
+test("una sesión firmada vence después de ocho horas", (t) => {
+  const previousOrigin = process.env.APP_ORIGIN;
+  const previousSecret = process.env.SESSION_SECRET;
+  process.env.APP_ORIGIN = "http://127.0.0.1:40331";
+  process.env.SESSION_SECRET = randomBytes(32).toString("base64url");
+  t.after(() => {
+    if (previousOrigin === undefined) delete process.env.APP_ORIGIN;
+    else process.env.APP_ORIGIN = previousOrigin;
+    if (previousSecret === undefined) delete process.env.SESSION_SECRET;
+    else process.env.SESSION_SECRET = previousSecret;
+  });
+  const issuedAt = Math.floor(Date.now() / 1000) * 1000;
+  let now = issuedAt;
+  t.mock.method(Date, "now", () => now);
+  const token = createSession();
+  now = issuedAt + 8 * 60 * 60 * 1000 - 1;
+  assert.equal(hasSession(token), true);
+  now++;
+  assert.equal(hasSession(token), false);
+});
 
 test("el panel protege Facturas y publica los precios en el website", { timeout: 100_000 }, async (t) => {
   const panel = resolve(import.meta.dirname, "..");
-  const sessions = new Map<string, string>();
   const menu = new Map<string, string>();
   const invoiceWrites: Record<string, unknown>[] = [];
   const useSheets = process.env.TEST_MENU_SHEETS === "1";
@@ -35,7 +56,6 @@ test("el panel protege Facturas y publica los precios en el website", { timeout:
     ContentService: { MimeType: { JSON: "application/json" }, createTextOutput: (json: string) => ({ setMimeType: () => json }) },
   };
   const menuScriptSource = readFileSync(resolve(panel, "scripts/menu-prices.gs"), "utf8");
-  let attempts = 0;
   const redis = createServer(async (req, res) => {
     try {
       const chunks: Buffer[] = [];
@@ -56,16 +76,11 @@ test("el panel protege Facturas y publica los precios en el website", { timeout:
         }));
         return;
       }
-      const [op, keyOrScript, ...args] = body;
-      const auth = req.url === "/auth" && req.headers.authorization === "Bearer test-auth";
+      const [op, , ...args] = body;
       const write = req.url === "/menu" && req.headers.authorization === "Bearer test-write";
       const read = req.url === "/menu" && req.headers.authorization === "Bearer test-read";
       let result: unknown;
-      if (auth && op === "GET") result = sessions.get(keyOrScript) ?? null;
-      else if (auth && op === "SET") { sessions.set(keyOrScript, args[0]); result = "OK"; }
-      else if (auth && op === "DEL") result = +sessions.delete(keyOrScript);
-      else if (auth && op === "EVAL") result = ++attempts;
-      else if ((read || write) && op === "HGETALL") result = [...menu].flat();
+      if ((read || write) && op === "HGETALL") result = [...menu].flat();
       else if (write && op === "EVAL") {
         const [, , id, base, expected, value] = args;
         const current = menu.get(id) ?? String(base);
@@ -84,7 +99,12 @@ test("el panel protege Facturas y publica los precios en el website", { timeout:
   const storage = `http://127.0.0.1:${address.port}`;
   const panelUrl = "http://127.0.0.1:40331";
   const password = "clave-para-este-flujo-local";
-  const common = { MENU_REDIS_URL: `${storage}/menu`, MENU_PRICE_KEY: "integration:prices" };
+  const menuStorage = useSheets
+    ? { MENU_SHEETS_SCRIPT_URL: `${storage}/menu-sheet`, MENU_SHEETS_SECRET: "test-menu-sheet" }
+    : {
+      MENU_REDIS_URL: `${storage}/menu`, MENU_PRICE_KEY: "integration:prices",
+      MENU_REDIS_READ_TOKEN: "test-read", MENU_REDIS_TOKEN: "test-write",
+    };
   let logs = "";
   function start(cwd: string, url: string, env: Record<string, string>) {
     const port = new URL(url).port;
@@ -105,10 +125,8 @@ test("el panel protege Facturas y publica los precios en el website", { timeout:
     throw new Error(`Servidor no disponible: ${url}\n${logs}`);
   }
   start(panel, panelUrl, {
-    ...common, APP_ORIGIN: panelUrl, MENU_REDIS_READ_TOKEN: "test-read",
-    ...(useSheets ? { MENU_SHEETS_SCRIPT_URL: `${storage}/menu-sheet`, MENU_SHEETS_SECRET: "test-menu-sheet" } : {}),
+    ...menuStorage, APP_ORIGIN: panelUrl,
     ADMIN_PASSWORD_HASH: await createPasswordHash(password), SESSION_SECRET: randomBytes(32).toString("base64url"),
-    AUTH_REDIS_URL: `${storage}/auth`, AUTH_REDIS_TOKEN: "test-auth", MENU_REDIS_TOKEN: "test-write",
     GOOGLE_SHEET_PERIODS: "", GOOGLE_APPS_SCRIPT_URL: `${storage}/apps-script`, GOOGLE_APPS_SCRIPT_SECRET: "test-apps-script",
   });
   await ready(panelUrl + "/admin");
@@ -137,6 +155,8 @@ test("el panel protege Facturas y publica los precios en el website", { timeout:
   assert.match(cookieHeader, /HttpOnly/i);
   assert.match(cookieHeader, /SameSite=strict/i);
   const cookie = cookieHeader.split(";")[0];
+  const alteredCookie = cookie.slice(0, -1) + (cookie.endsWith("A") ? "B" : "A");
+  assert.equal((await post("/admin/api/website/prices", {}, alteredCookie)).status, 401);
   const publicHome = await request("/");
   assert.equal(publicHome.status, 200);
   assert.doesNotMatch(publicHome.headers.get("x-robots-tag") ?? "", /noindex/);
@@ -170,8 +190,12 @@ test("el panel protege Facturas y publica los precios en el website", { timeout:
     assert.match(await response.text(), /"price":7619/);
   }
   assert.match(await (await fetch(panelUrl + "/llms-full.txt")).text(), /7[\s\u00a0\u202f]?619/);
-  assert.equal((await post("/admin/api/auth/logout", {}, cookie)).status, 303);
-  assert.equal((await post("/admin/api/website/prices", values, cookie)).status, 401);
-  for (let i = attempts; i < 8; i++) await post("/admin/api/auth/login", { password: "wrong" });
+  const logout = await post("/admin/api/auth/logout", {}, cookie);
+  assert.equal(logout.status, 303);
+  assert.match(logout.headers.get("set-cookie") ?? "", /Max-Age=0/i);
+  assert.equal((await post("/admin/api/website/prices", values)).status, 401);
+  for (let i = 0; i < 5; i++) {
+    assert.match((await post("/admin/api/auth/login", { password: "wrong" })).headers.get("location") ?? "", /estado=invalida/);
+  }
   assert.match((await post("/admin/api/auth/login", { password })).headers.get("location") ?? "", /estado=limite/);
 });

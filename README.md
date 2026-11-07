@@ -98,8 +98,11 @@ precios base definidos en el catálogo.
 hojas y el Apps Script existentes.
 
 Configurá `APP_ORIGIN=https://andysburger.com` en el proyecto de Vercel.
-Usá un Redis separado para las sesiones con `AUTH_REDIS_URL` y
-`AUTH_REDIS_TOKEN`. Generá un `SESSION_SECRET` aleatorio de al menos 32
+La sesión se valida con una cookie firmada que vence a las ocho horas.
+El límite de inicio de sesión se aplica por IP en cada instancia de Vercel.
+Al cerrar sesión, el navegador elimina la cookie. Una copia de la cookie
+sigue siendo válida hasta su vencimiento.
+Generá un `SESSION_SECRET` aleatorio de al menos 32
 bytes y el `ADMIN_PASSWORD_HASH` con
 `node --experimental-strip-types scripts/hash-password.ts`. El script recibe
 la contraseña por entrada estándar. Configurá las variables de Google según
