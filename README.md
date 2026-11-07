@@ -68,7 +68,19 @@ Después de conectar el dominio, redirige `www.andysburger.com` hacia
 
 ## Precios administrados
 
-El panel guarda cambios por ID de producto en Redis. La parte pública usa
+Para guardar los precios en Google Sheets, usá un documento privado con una
+pestaña `Precios` y las columnas `ID`, `Producto`, `Categoría` y `Precio (CRC)`.
+Mantené los IDs del catálogo y usá números enteros para los precios.
+
+En un proyecto independiente de Apps Script, pegá `scripts/menu-prices.gs`.
+En las propiedades del script guardá `MENU_SHEET_ID` con el ID del documento y
+`MENU_SHEETS_SECRET` con un secreto aleatorio. Implementá el script como
+aplicación web, ejecutada por el propietario con acceso al documento, y permití
+el acceso a cualquiera para que el servidor de Vercel pueda enviar el secreto
+en cada solicitud. En Vercel guardá `MENU_SHEETS_SCRIPT_URL` con la URL
+`/exec` y `MENU_SHEETS_SECRET` con el mismo secreto.
+
+Sin Google Sheets configurado, el panel guarda cambios por ID de producto en Redis. La parte pública usa
 `MENU_REDIS_READ_TOKEN` para leer y el editor usa `MENU_REDIS_TOKEN` para
 guardar. Configurá también `MENU_REDIS_URL` y `MENU_PRICE_KEY` según
 `.env.example`. Los tokens se usan solo en el servidor.

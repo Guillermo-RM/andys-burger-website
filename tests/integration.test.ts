@@ -5,6 +5,8 @@ import { spawn } from "node:child_process";
 import { once } from "node:events";
 import { randomBytes } from "node:crypto";
 import { resolve } from "node:path";
+import { readFileSync } from "node:fs";
+import { runInNewContext } from "node:vm";
 import { createPasswordHash } from "../lib/admin/password.ts";
 
 test("el panel protege Facturas y publica los precios en el website", { timeout: 100_000 }, async (t) => {
@@ -12,12 +14,40 @@ test("el panel protege Facturas y publica los precios en el website", { timeout:
   const sessions = new Map<string, string>();
   const menu = new Map<string, string>();
   const invoiceWrites: Record<string, unknown>[] = [];
+  const useSheets = process.env.TEST_MENU_SHEETS === "1";
+  const sheetRows = [["the-boss", "The Boss", "Hamburguesas", 7500]];
+  const menuScript = {
+    PropertiesService: { getScriptProperties: () => ({
+      getProperty: (key: string) => key === "MENU_SHEETS_SECRET" ? "test-menu-sheet" : "test-sheet",
+    }) },
+    SpreadsheetApp: {
+      openById: () => ({ getSheetByName: () => ({
+        getLastRow: () => sheetRows.length + 1,
+        getRange: (row: number, column: number) => ({
+          getValues: () => sheetRows,
+          setValue: (value: number) => { sheetRows[row - 2][column - 1] = value; },
+        }),
+        appendRow: (row: (string | number)[]) => { sheetRows.push(row); },
+      }) }),
+      flush: () => {},
+    },
+    LockService: { getScriptLock: () => ({ tryLock: () => true, releaseLock: () => {} }) },
+    ContentService: { MimeType: { JSON: "application/json" }, createTextOutput: (json: string) => ({ setMimeType: () => json }) },
+  };
+  const menuScriptSource = readFileSync(resolve(panel, "scripts/menu-prices.gs"), "utf8");
   let attempts = 0;
   const redis = createServer(async (req, res) => {
     try {
       const chunks: Buffer[] = [];
       for await (const chunk of req) chunks.push(chunk);
       const body = JSON.parse(Buffer.concat(chunks).toString());
+      if (req.url === "/menu-sheet") {
+        const result = runInNewContext(menuScriptSource + "\ndoPost(event)", {
+          ...menuScript, event: { postData: { contents: JSON.stringify(body) } },
+        });
+        res.writeHead(200, { "Content-Type": "application/json" }).end(result);
+        return;
+      }
       if (req.url === "/apps-script") {
         assert.equal(body.secret, "test-apps-script");
         invoiceWrites.push(body);
@@ -76,6 +106,7 @@ test("el panel protege Facturas y publica los precios en el website", { timeout:
   }
   start(panel, panelUrl, {
     ...common, APP_ORIGIN: panelUrl, MENU_REDIS_READ_TOKEN: "test-read",
+    ...(useSheets ? { MENU_SHEETS_SCRIPT_URL: `${storage}/menu-sheet`, MENU_SHEETS_SECRET: "test-menu-sheet" } : {}),
     ADMIN_PASSWORD_HASH: await createPasswordHash(password), SESSION_SECRET: randomBytes(32).toString("base64url"),
     AUTH_REDIS_URL: `${storage}/auth`, AUTH_REDIS_TOKEN: "test-auth", MENU_REDIS_TOKEN: "test-write",
     GOOGLE_SHEET_PERIODS: "", GOOGLE_APPS_SCRIPT_URL: `${storage}/apps-script`, GOOGLE_APPS_SCRIPT_SECRET: "test-apps-script",
@@ -130,6 +161,7 @@ test("el panel protege Facturas y publica los precios en el website", { timeout:
   assert.equal((await post("/admin/api/website/prices", values, cookie, "https://external.example")).status, 403);
   assert.match((await post("/admin/api/website/prices", { ...values, id: "does-not-exist" }, cookie)).headers.get("location") ?? "", /estado=invalid/);
   assert.match((await post("/admin/api/website/prices", values, cookie)).headers.get("location") ?? "", /estado=saved/);
+  if (useSheets) assert.equal(sheetRows[0][3], 7619);
   assert.match((await post("/admin/api/website/prices", { ...values, price: "7629" }, cookie)).headers.get("location") ?? "", /estado=conflict/);
   assert.match((await post("/admin/api/website/prices", values, cookie)).headers.get("location") ?? "", /estado=saved/);
   for (const path of ["/", "/menu"]) {

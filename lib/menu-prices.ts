@@ -1,4 +1,5 @@
 import { menuWithPrices } from "@/lib/menu";
+import { readMenuSheet, usesMenuSheets } from "@/lib/menu-sheets";
 
 async function readPublishedPrices(endpoint: string, key: string) {
   const url = new URL(endpoint);
@@ -29,8 +30,9 @@ async function readPublishedPrices(endpoint: string, key: string) {
 
 export async function getPublishedMenu() {
   const endpoint = process.env.MENU_REDIS_URL;
-  if (!endpoint && !process.env.MENU_REDIS_READ_TOKEN) return menuWithPrices();
   try {
+    if (usesMenuSheets()) return menuWithPrices(await readMenuSheet());
+    if (!endpoint && !process.env.MENU_REDIS_READ_TOKEN) return menuWithPrices();
     if (!endpoint) throw new Error("Missing menu storage URL");
     const entries = await readPublishedPrices(endpoint, process.env.MENU_PRICE_KEY || "andys:website:prices:v1");
     return menuWithPrices(new Map(entries));
