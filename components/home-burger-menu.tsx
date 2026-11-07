@@ -6,25 +6,8 @@ import { AdditionalCard } from "@/components/additional-card";
 import { useOrderCart } from "@/components/order-cart-context";
 import { WhatsAppIcon } from "@/components/whatsapp-icon";
 import { trackWhatsAppClick } from "@/lib/analytics";
-import { additionalOrderProducts, burgers, extraCategories, extras, potatoOrders } from "@/lib/menu";
+import { buildOrderProducts, type MenuSnapshot } from "@/lib/menu";
 import { createWhatsAppUrl } from "@/lib/whatsapp";
-
-const orderProducts = [
-  ...burgers.map((burger) => ({ ...burger, orderGroup: "burgers" as const })),
-  ...extras.map((extra) => ({ ...extra, orderGroup: "extras" as const })),
-  ...additionalOrderProducts.map((potato) => ({
-    ...potato,
-    orderGroup: "potatoes" as const,
-  })),
-];
-const extraCategoryColumns = [
-  extraCategories.filter((category) =>
-    ["carne", "vegetales"].includes(category.id),
-  ),
-  extraCategories.filter((category) =>
-    ["especiales", "salsas-aderezos", "dulces"].includes(category.id),
-  ),
-];
 
 const formatColones = (amount: number) =>
   new Intl.NumberFormat("es-CR", {
@@ -33,7 +16,13 @@ const formatColones = (amount: number) =>
     maximumFractionDigits: 0,
   }).format(amount);
 
-export function HomeBurgerMenu() {
+export function HomeBurgerMenu({ menu }: { menu: MenuSnapshot }) {
+  const { burgers, extraCategories, potatoOrders } = menu;
+  const orderProducts = useMemo(() => buildOrderProducts(menu), [menu]);
+  const extraCategoryColumns = [
+    extraCategories.filter((category) => ["carne", "vegetales"].includes(category.id)),
+    extraCategories.filter((category) => ["especiales", "salsas-aderezos", "dulces"].includes(category.id)),
+  ];
   const [mobileCartOpen, setMobileCartOpen] = useState(false);
   const { cart, setQuantity, toggleProduct } = useOrderCart();
   const [expandedIngredients, setExpandedIngredients] = useState<
@@ -46,7 +35,7 @@ export function HomeBurgerMenu() {
       orderProducts
         .filter((product) => (cart[product.id] ?? 0) > 0)
         .map((product) => ({ ...product, quantity: cart[product.id] })),
-    [cart],
+    [cart, orderProducts],
   );
   const cartSections = [
     {

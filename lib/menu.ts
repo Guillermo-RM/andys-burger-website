@@ -279,6 +279,30 @@ export const potatoOrders: PotatoOrder[] = [
 
 
 export const dressingOptions = ["Chipotle de la casa", "Mayonesa de la casa", "Tártara"] as const;
-export const additionalOrderProducts = potatoOrders.flatMap((item) =>
-  item.dressings ? dressingOptions.map((dressing, index) => ({ ...item, id: `${item.id}-aderezo-${index}`, name: `${item.name} — ${dressing}` })) : [item],
-);
+
+export function menuWithPrices(prices: ReadonlyMap<string, number> = new Map()) {
+  const update = <T extends { id: string; price: number }>(item: T): T =>
+    ({ ...item, price: prices.get(item.id) ?? item.price });
+  const categories = extraCategories.map((category) => ({ ...category, items: category.items.map(update) }));
+  return {
+    burgers: burgers.map(update),
+    extraCategories: categories,
+    extras: categories.flatMap((category) => category.items),
+    potatoOrders: potatoOrders.map(update),
+  };
+}
+
+export type MenuSnapshot = ReturnType<typeof menuWithPrices>;
+
+export function buildOrderProducts(menu: MenuSnapshot) {
+  const additionalProducts = menu.potatoOrders.flatMap((item) =>
+    item.dressings ? dressingOptions.map((dressing, index) => ({
+      ...item, id: `${item.id}-aderezo-${index}`, name: `${item.name} — ${dressing}`,
+    })) : [item],
+  );
+  return [
+    ...menu.burgers.map((item) => ({ ...item, orderGroup: "burgers" as const })),
+    ...menu.extras.map((item) => ({ ...item, orderGroup: "extras" as const })),
+    ...additionalProducts.map((item) => ({ ...item, orderGroup: "potatoes" as const })),
+  ];
+}

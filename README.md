@@ -65,3 +65,33 @@ Después de conectar el dominio, redirige `www.andysburger.com` hacia
 - `/robots.txt`: acceso para buscadores y rastreadores de IA.
 - `/llms.txt`: resumen oficial del negocio para asistentes.
 - `/llms-full.txt`: ficha completa, menú, precios, ingredientes y reglas de precisión.
+
+## Precios administrados
+
+El panel guarda cambios por ID de producto en Redis. La parte pública usa
+`MENU_REDIS_READ_TOKEN` para leer y el editor usa `MENU_REDIS_TOKEN` para
+guardar. Configurá también `MENU_REDIS_URL` y `MENU_PRICE_KEY` según
+`.env.example`. Los tokens se usan solo en el servidor.
+
+`/api/menu/catalog` y el editor usan el mismo catálogo de referencia.
+Conservá los IDs al cambiar los nombres o las descripciones. La portada, el menú, los
+datos estructurados y el texto de descubrimiento usan los precios publicados
+en cada solicitud. Sin la configuración Redis, se usan los
+precios base definidos en el catálogo.
+
+## Panel administrativo
+
+`/admin` abre el inicio de sesión. La sesión protege `/admin/facturas`,
+`/admin/website` y las operaciones bajo `/admin/api`. Facturas usa las
+hojas y el Apps Script existentes.
+
+Configurá `APP_ORIGIN=https://andysburger.com` en el proyecto de Vercel.
+Usá un Redis separado para las sesiones con `AUTH_REDIS_URL` y
+`AUTH_REDIS_TOKEN`. Generá un `SESSION_SECRET` aleatorio de al menos 32
+bytes y el `ADMIN_PASSWORD_HASH` con
+`node --experimental-strip-types scripts/hash-password.ts`. El script recibe
+la contraseña por entrada estándar. Configurá las variables de Google según
+`.env.example` y conservá los IDs por año del sistema existente si los usa.
+
+Ejecutá `npm run build` y luego `npm run test:integration` para comprobar el
+sitio y el panel bajo el mismo origen con Redis y Apps Script simulados.

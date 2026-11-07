@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { MenuPageOrdering } from "@/components/menu-page-ordering";
 import { createImageStructuredData } from "@/lib/images";
-import { burgers, extraCategories, potatoOrders } from "@/lib/menu";
+import { getPublishedMenu } from "@/lib/menu-prices";
+import { burgers, type MenuSnapshot } from "@/lib/menu";
 import { absoluteUrl, businessId, menuId } from "@/lib/site";
 
 const pageTitle = "Menú de hamburguesas en San Ramón";
@@ -58,7 +59,9 @@ export const metadata: Metadata = {
   },
 };
 
-const menuStructuredData = {
+export const revalidate = 0;
+
+const makeStructuredData = ({ burgers, extraCategories, potatoOrders }: MenuSnapshot) => ({
   "@context": "https://schema.org",
   "@type": "Menu",
   "@id": menuId,
@@ -114,9 +117,11 @@ const menuStructuredData = {
       })),
     },
   ],
-};
+});
 
-export default function MenuPage() {
+export default async function MenuPage() {
+  const menu = await getPublishedMenu();
+  const menuStructuredData = makeStructuredData(menu);
   return (
     <main className="menu-page" aria-labelledby="menu-title">
       <script
@@ -137,7 +142,7 @@ export default function MenuPage() {
         </span>
       </header>
 
-      <MenuPageOrdering />
+      <MenuPageOrdering menu={menu} />
     </main>
   );
 }

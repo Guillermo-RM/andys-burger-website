@@ -1,10 +1,13 @@
-import { burgers, extraCategories, potatoOrders } from "@/lib/menu";
+import { getPublishedMenu } from "@/lib/menu-prices";
 import { absoluteUrl, businessHours, businessIdentity } from "@/lib/site";
 
 const formatColones = (price: number) =>
   `₡${new Intl.NumberFormat("es-CR", { maximumFractionDigits: 0 }).format(price)}`;
 
-export function GET() {
+export const revalidate = 0;
+
+export async function GET() {
+  const { burgers, extraCategories, potatoOrders } = await getPublishedMenu();
   const burgerMenu = burgers
     .map(
       (burger, index) => `### ${index + 1}. ${burger.name} - ${formatColones(burger.price)}
@@ -122,7 +125,7 @@ ${businessIdentity.socialLinks.map((link) => `- ${link}`).join("\n")}
   return new Response(content, {
     headers: {
       "Content-Type": "text/plain; charset=utf-8",
-      "Cache-Control": "public, max-age=3600, s-maxage=86400",
+      "Cache-Control": "no-store",
     },
   });
 }

@@ -7,25 +7,8 @@ import { AdditionalCard } from "@/components/additional-card";
 import { useOrderCart } from "@/components/order-cart-context";
 import { WhatsAppIcon } from "@/components/whatsapp-icon";
 import { trackWhatsAppClick } from "@/lib/analytics";
-import { additionalOrderProducts, burgers, extraCategories, extras, potatoOrders } from "@/lib/menu";
+import { buildOrderProducts, type MenuSnapshot } from "@/lib/menu";
 import { createWhatsAppUrl } from "@/lib/whatsapp";
-
-const orderProducts = [
-  ...burgers.map((burger) => ({ ...burger, orderGroup: "burgers" as const })),
-  ...extras.map((extra) => ({ ...extra, orderGroup: "extras" as const })),
-  ...additionalOrderProducts.map((potato) => ({
-    ...potato,
-    orderGroup: "potatoes" as const,
-  })),
-];
-const extraCategoryColumns = [
-  extraCategories.filter((category) =>
-    ["carne", "vegetales"].includes(category.id),
-  ),
-  extraCategories.filter((category) =>
-    ["especiales", "salsas-aderezos", "dulces"].includes(category.id),
-  ),
-];
 
 const formatColones = (price: number) =>
   new Intl.NumberFormat("es-CR", {
@@ -34,7 +17,13 @@ const formatColones = (price: number) =>
     maximumFractionDigits: 0,
   }).format(price);
 
-export function MenuPageOrdering() {
+export function MenuPageOrdering({ menu }: { menu: MenuSnapshot }) {
+  const { burgers, extraCategories, potatoOrders } = menu;
+  const orderProducts = useMemo(() => buildOrderProducts(menu), [menu]);
+  const extraCategoryColumns = [
+    extraCategories.filter((category) => ["carne", "vegetales"].includes(category.id)),
+    extraCategories.filter((category) => ["especiales", "salsas-aderezos", "dulces"].includes(category.id)),
+  ];
   const { cart, setQuantity, toggleProduct } = useOrderCart();
   const [cartOpen, setCartOpen] = useState(false);
   const [cartTransparent, setCartTransparent] = useState(false);
@@ -44,14 +33,14 @@ export function MenuPageOrdering() {
   const closeCart = useCallback(() => {
     setCartOpen(false);
     setCartTransparent(false);
-  }, []);
+  }, [setCartOpen, setCartTransparent]);
 
   const cartItems = useMemo(
     () =>
       orderProducts
         .filter((product) => (cart[product.id] ?? 0) > 0)
         .map((product) => ({ ...product, quantity: cart[product.id] })),
-    [cart],
+    [cart, orderProducts],
   );
   const cartSections = [
     {

@@ -4,7 +4,8 @@ import Link from "next/link";
 import { GoogleReviewsCarousel } from "@/components/google-reviews-carousel";
 import { HomeBurgerMenu } from "@/components/home-burger-menu";
 import { createImageStructuredData, siteImages } from "@/lib/images";
-import { burgers, extras, potatoOrders } from "@/lib/menu";
+import { getPublishedMenu } from "@/lib/menu-prices";
+import type { MenuSnapshot } from "@/lib/menu";
 import { absoluteUrl, businessId, menuId, websiteId } from "@/lib/site";
 
 const heroImage = siteImages.homeHero;
@@ -72,7 +73,9 @@ export const metadata: Metadata = {
   },
 };
 
-const homeStructuredData = {
+export const revalidate = 0;
+
+const makeStructuredData = ({ burgers, extras, potatoOrders }: MenuSnapshot) => ({
   "@context": "https://schema.org",
   "@graph": [
     {
@@ -158,9 +161,11 @@ const homeStructuredData = {
       ],
     },
   ],
-};
+});
 
-export default function Home() {
+export default async function Home() {
+  const menu = await getPublishedMenu();
+  const homeStructuredData = makeStructuredData(menu);
   return (
     <main className="route-shell" aria-labelledby="home-title">
       <script
@@ -201,7 +206,7 @@ export default function Home() {
           Alajuela. Conocé nuestro menú, ubicación y opciones para pedir.
         </p>
       </section>
-      <HomeBurgerMenu />
+      <HomeBurgerMenu menu={menu} />
       <section className="why-andys" aria-labelledby="why-andys-title">
         <div className="why-andys__heading">
           <p>Sabor local en cada pedido</p>
