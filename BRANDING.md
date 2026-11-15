@@ -62,9 +62,6 @@ Todas las páginas y componentes deben ser completamente responsive.
 - `sitemap.xml` incluye Inicio, Menú, Contacto y las imágenes principales.
 - `robots.txt` permite el rastreo general y explicita acceso para buscadores y
   rastreadores de IA conocidos.
-- `llms.txt` ofrece un resumen verificable de la entidad local.
-- `llms-full.txt` presenta dirección, horario, servicios, reputación, redes y
-  el menú completo en texto.
 - Los datos estructurados globales usan una sola entidad `FastFoodRestaurant`
   con identificadores absolutos compartidos por todas las páginas.
 - No se garantiza aparición ni posición en un buscador: el sitio debe estar

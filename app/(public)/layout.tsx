@@ -52,15 +52,6 @@ export const metadata: Metadata = {
   manifest: "/manifest.webmanifest",
   alternates: {
     canonical: "/",
-    types: {
-      "text/plain": [
-        { url: "/llms.txt", title: "Resumen de Andy's Burger para asistentes" },
-        {
-          url: "/llms-full.txt",
-          title: "Información completa de Andy's Burger para asistentes",
-        },
-      ],
-    },
   },
   robots: {
     index: true,
@@ -124,20 +115,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es-CR">
-      <head>
-        <link
-          rel="alternate"
-          type="text/plain"
-          href={absoluteUrl("/llms.txt")}
-          title="Resumen oficial de Andy's Burger para asistentes de IA"
-        />
-        <link
-          rel="alternate"
-          type="text/plain"
-          href={absoluteUrl("/llms-full.txt")}
-          title="Información completa de Andy's Burger para asistentes de IA"
-        />
-      </head>
       <body className={nunito.variable}>
         <noscript>
           <iframe

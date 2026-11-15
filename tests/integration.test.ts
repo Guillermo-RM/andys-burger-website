@@ -189,7 +189,9 @@ test("el panel protege Facturas y publica los precios en el website", { timeout:
     assert.equal(response.status, 200);
     assert.match(await response.text(), /"price":7619/);
   }
-  assert.match(await (await fetch(panelUrl + "/llms-full.txt")).text(), /7[\s\u00a0\u202f]?619/);
+  for (const path of ["/llms.txt", "/llms-full.txt"]) {
+    assert.equal((await fetch(panelUrl + path)).status, 404);
+  }
   const logout = await post("/admin/api/auth/logout", {}, cookie);
   assert.equal(logout.status, 303);
   assert.match(logout.headers.get("set-cookie") ?? "", /Max-Age=0/i);
