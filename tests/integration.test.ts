@@ -133,6 +133,9 @@ test("el panel protege Facturas y publica los precios en el website", { timeout:
   const request = (path: string, options?: RequestInit) => fetch(panelUrl + path, { ...options, redirect: "manual" });
   const post = (path: string, values: Record<string, string>, cookie = "", origin = panelUrl) =>
     request(path, { method: "POST", headers: { Origin: origin, Cookie: cookie }, body: new URLSearchParams(values) });
+  const fidelityWithoutSession = await request("/admin/fidelidad");
+  assert.ok([303, 307, 308].includes(fidelityWithoutSession.status));
+  assert.match(fidelityWithoutSession.headers.get("location") ?? "", /\/admin$/);
   const unauthenticated = await request("/admin/website");
   assert.ok([303, 307, 308].includes(unauthenticated.status));
   assert.match(unauthenticated.headers.get("location") ?? "", /\/admin$/);
@@ -157,6 +160,11 @@ test("el panel protege Facturas y publica los precios en el website", { timeout:
   const cookie = cookieHeader.split(";")[0];
   const alteredCookie = cookie.slice(0, -1) + (cookie.endsWith("A") ? "B" : "A");
   assert.equal((await post("/admin/api/website/prices", {}, alteredCookie)).status, 401);
+  const fidelity = await request("/admin/fidelidad", { headers: { Cookie: cookie } });
+  assert.equal(fidelity.status, 200);
+  assert.match(fidelity.headers.get("x-robots-tag") ?? "", /noindex/);
+  assert.match(await fidelity.text(), /Clientes y compras/);
+  assert.equal(invoiceWrites.length, 0);
   const publicHome = await request("/");
   assert.equal(publicHome.status, 200);
   assert.doesNotMatch(publicHome.headers.get("x-robots-tag") ?? "", /noindex/);

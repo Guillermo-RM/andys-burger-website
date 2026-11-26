@@ -1,0 +1,21 @@
+.workspace {
+  display: grid;
+  gap: 1rem;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  background: var(--charcoal);
+}
+
+.workspace p {
+  max-width: 60ch;
+  color: var(--muted);
+}
+
+.workspace .notice {
+  padding: 1rem;
+  border-left: 3px solid var(--orange);
+  border-radius: 0.25rem;
+  background: var(--black);
+  color: var(--white);
+}
